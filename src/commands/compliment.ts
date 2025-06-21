@@ -1,13 +1,14 @@
+// lets be honest these arent real compliments
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember, MessageFlags } from 'discord.js';
 import { getKibunMood, generateResponse, generateCompliment } from '../kibunlogic';
 
 export const data = new SlashCommandBuilder()
     .setName('compliment-me')
-    .setDescription("Kibun gives you a... compliment?");
+    .setDescription("drops a backhanded compliment on ya");
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.inGuild() || !interaction.member) {
-        await interaction.reply({ content: "This command can only be used in a server.", flags: MessageFlags.Ephemeral });
+        await interaction.reply({ content: "this only works in a server my dude", flags: MessageFlags.Ephemeral });
         return;
     }
 
@@ -16,5 +17,5 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const compliments = generateCompliment(member);
     const response = generateResponse(mood, compliments);
 
-    await interaction.reply(`<@${member.id}>, ${response}`);
+    await interaction.reply(`<@${member.id}> ${response}`);
 }

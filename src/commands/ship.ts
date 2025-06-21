@@ -1,16 +1,17 @@
+// calculating love with math because we're all dead inside
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { calculateShip } from '../kibunlogic';
 
 export const data = new SlashCommandBuilder()
     .setName('ship')
-    .setDescription('Generates a "compatibility report" for two users.')
+    .setDescription('sees if two people are a vibe or a mess')
     .addUserOption(option =>
         option.setName('user1')
-            .setDescription('The first user')
+            .setDescription('the first victim')
             .setRequired(true))
     .addUserOption(option =>
         option.setName('user2')
-            .setDescription('The second user')
+            .setDescription('the second victim')
             .setRequired(true));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -18,12 +19,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const user2 = interaction.options.getUser('user2')!;
 
     if (user1.bot || user2.bot) {
-        await interaction.reply("I can't ship bots, they lack the capacity for true love or chaotic arguments.");
+        await interaction.reply("i cant ship bots they dont know pain or love");
         return;
     }
 
     if (user1.id === user2.id) {
-        await interaction.reply("Shipping someone with themselves? That's just self-love, and it's a 100% perfect match. Go you.");
+        await interaction.reply("shipping someone with themself is just self love and its a 100% match go off");
         return;
     }
 
@@ -31,11 +32,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const embed = {
         color: 0xFF69B4,
-        title: `Love-o-Meter Results for ${user1.username} & ${user2.username}`,
-        description: `Ship Name: **${result.shipName}**\nCompatibility: **${result.percentage}%**`,
+        title: `vibe check for ${user1.username} & ${user2.username}`,
+        description: `your ship name is **${result.shipName}**\ncompatibility: **${result.percentage}%**`,
         fields: [
             {
-                name: 'Kibun\'s Commentary',
+                name: "kibuns verdict",
                 value: result.commentary,
             },
         ],

@@ -1,12 +1,14 @@
+// this command used to be so fucking stupid it wasn't even random
+// thank god we fixed it
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { getKibunMood, makeDecision, generateResponse } from '../kibunlogic';
 
 export const data = new SlashCommandBuilder()
     .setName('decide')
-    .setDescription('Kibun makes a decision for you with flawless, silly logic.')
+    .setDescription('makes a choice for your indecisive ass')
     .addStringOption(option =>
         option.setName('options')
-            .setDescription('The choices, separated by a comma (e.g., Pizza, Tacos, Salad)')
+            .setDescription('the choices separated by a comma cmon you know how this works')
             .setRequired(true));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -16,12 +18,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const decisionResult = makeDecision(options);
 
     if ('reason' in decisionResult) {
-        await interaction.reply(`My choice is **${decisionResult.chosen}**. Why? ${decisionResult.reason}`);
+        await interaction.reply(`my choice is **${decisionResult.chosen}** why ${decisionResult.reason}`);
         return;
     }
 
     const mood = getKibunMood(interaction);
     const reason = generateResponse(mood, decisionResult.reasons);
 
-    await interaction.reply(`I have chosen: **${decisionResult.chosen}**. ${reason}`);
+    await interaction.reply(`i have chosen **${decisionResult.chosen}** ${reason}`);
 }

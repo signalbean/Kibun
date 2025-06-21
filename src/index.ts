@@ -1,3 +1,5 @@
+// this is the main file that runs the whole show
+// if the bot is on fire this is probably the first place to look
 import fs from 'node:fs';
 import path from 'node:path';
 import { Client, Collection, Events, GatewayIntentBits, REST, Routes, ChatInputCommandInteraction, MessageFlags } from 'discord.js';
@@ -70,8 +72,22 @@ client.on(Events.InteractionCreate, async interaction => {
     try {
         await command.execute(interaction);
     } catch (error) {
-        console.error(`[DIAGNOSTIC] An error occurred in command '${interaction.commandName}':`);
-        console.error(error);
+        // an actual, real fucking error happened inside the command logic.
+        // the defer/edit pattern in the commands should prevent the bullshit "unknown interaction" errors.
+        // so if this block runs, something else is truly fucked.
+        console.error(`[CRITICAL] Error in command '${interaction.commandName}':`, error);
+        
+        // since we almost certainly deferred the reply, we have to edit it or follow up.
+        if (interaction.replied || interaction.deferred) {
+            await interaction.editReply({ content: 'shit broke lol my bad' }).catch(e => {
+                // if editReply fails, try a followUp. if this fails too, we're toast.
+                console.error("[ULTRA-CRITICAL] Couldn't even edit the reply. Trying a follow-up.", e)
+                interaction.followUp({ content: 'shit broke so bad i couldnt even edit my first reply lmao', ephemeral: true });
+            });
+        } else {
+           // if we somehow failed before deferring, try a normal reply as a last ditch effort.
+           await interaction.reply({ content: 'shit broke right at the start lmao', ephemeral: true });
+        }
     }
 });
 
