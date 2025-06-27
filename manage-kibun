@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# a simple script to manage the bot on linux
+# because windows is cringe
+
+# --- Colors for the TUI ---
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# This makes the script portable by changing to its own directory
+cd "$(dirname "$0")"
+
+# --- The Main Menu Loop ---
+while true; do
+    clear
+    echo -e "${CYAN}==========================================================${NC}"
+    echo -e "${CYAN}                 KIBUN BOT MANAGER (Linux)                ${NC}"
+    echo -e "${CYAN}==========================================================${NC}"
+    echo ""
+    echo -e "  ${YELLOW}[1]${NC} Start Bot (Development Mode)"
+    echo -e "      - Uses ts-node for live-reloading on code changes"
+    echo ""
+    echo -e "  ${GREEN}[2]${NC} Build Project"
+    echo -e "      - Compiles TypeScript into JavaScript for production"
+    echo ""
+    echo -e "  ${CYAN}[3]${NC} Start Bot (Production Mode)"
+    echo -e "      - Runs the compiled JavaScript code from the 'dist' folder"
+    echo ""
+    echo -e "----------------------------------------------------------"
+    echo -e "  ${RED}[4]${NC} Exit"
+    echo -e "----------------------------------------------------------"
+    echo ""
+    read -p "Enter your choice [1-4]: " choice
+
+    case $choice in
+        1)
+            clear
+            echo -e "${YELLOW}Starting in DEVELOPMENT mode...${NC}"
+            echo "Press CTRL+C at any time to stop the bot and return here."
+            echo "----------------------------------------------------------"
+            echo ""
+            npm run dev
+            echo ""
+            echo "----------------------------------------------------------"
+            read -p "Bot process stopped. Press Enter to return to the main menu..."
+            ;;
+        2)
+            clear
+            echo -e "${GREEN}Starting the build process...${NC}"
+            echo "----------------------------------------------------------"
+            echo ""
+            npm run build
+            
+            # Check the exit code of the last command ($?)
+            if [ $? -eq 0 ]; then
+                echo -e "\n${GREEN}[OK] Build completed successfully!${NC}"
+            else
+                echo -e "\n${RED}[!!] Build FAILED. Please review the errors above.${NC}"
+            fi
+
+            echo "----------------------------------------------------------"
+            echo ""
+            read -p "The build process is complete. Press Enter to return to the main menu..."
+            ;;
+        3)
+            clear
+            echo -e "${CYAN}Starting in PRODUCTION mode...${NC}"
+            echo "Press CTRL+C at any time to stop the bot and return here."
+            echo "----------------------------------------------------------"
+            echo ""
+            npm start
+            echo ""
+            echo "----------------------------------------------------------"
+            read -p "Bot process stopped. Press Enter to return to the main menu..."
+            ;;
+        4)
+            clear
+            exit 0
+            ;;
+        *)
+            clear
+            echo -e "${RED}Invalid choice. Please try again.${NC}"
+            sleep 2
+            ;;
+    esac
+done
