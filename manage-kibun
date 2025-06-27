@@ -10,8 +10,10 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# This makes the script portable by changing to its own directory
-cd "$(dirname "$0")"
+# define the path to your project
+PROJECT_DIR="/home/concyst/Documents/GitHub/Kibun"
+# change to that directory before doing anything else
+cd "$PROJECT_DIR"
 
 # --- The Main Menu Loop ---
 while true; do
